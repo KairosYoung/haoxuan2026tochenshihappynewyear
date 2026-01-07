@@ -7,16 +7,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 const imgPortrait = "w-full max-w-[240px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6";
 const imgLandscape = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6";
 const imgBanner = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6"; 
-const imgSmallIcon = "w-[140px] h-[140px] rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-4";
+
+// 修复点 1：让小图标完整显示，不裁剪
+const imgSmallIcon = "w-full max-w-[300px] h-auto rounded-lg shadow-md border border-stone-200 block mx-auto my-4";
 
 // Helper to parse markdown-style bolding
 const parseBold = (text: string) => {
   if (!text) return null;
-  // Split by double asterisks
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      // Remove the asterisks and wrap in strong
       return <strong key={index} className="font-bold text-stone-900">{part.slice(2, -2)}</strong>;
     }
     return <span key={index}>{part}</span>;
@@ -47,7 +47,8 @@ const timelineData: TimelineEvent[] = [
       </div>
     ),
     details: "最后的最后，再次感谢您过去一年里有意无意之间对我的启发、给我的力量，衷心地祝福您福暖四季、顺遂安康，继续做更多批判又真实、浪漫又需要、中国又世界、满怀真诚和力量的理论与实证研究！—— 淏璇 二〇二四·元旦",
-    pdfLink: '#' 
+    // 2024 PDF 链接
+    pdfLink: '/2024blessing.pdf' 
   },
   {
     id: '2025',
@@ -92,6 +93,8 @@ const timelineData: TimelineEvent[] = [
       </div>
     ),
     details: "THANKS FOR THE MULTI-LIGHTEN-ING 要缓慢而坚定地更新，要在范式、知识技术的增长中保有澄明与自由，要成其所是——淏璇 二〇二五·元旦",
+    // 🔴 修改点：2025 也改为 PDF 链接
+    pdfLink: '/2025blessing.pdf',
     slides: [
       '/slide1.png',
       '/slide2.png',
@@ -162,7 +165,6 @@ const timelineData: TimelineEvent[] = [
 
 export const SectionTimeline: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   const getIcon = (type: string) => {
     switch (type) {
@@ -175,21 +177,6 @@ export const SectionTimeline: React.FC = () => {
 
   const handleOpenModal = (event: TimelineEvent) => {
     setSelectedEvent(event);
-    setCurrentSlideIndex(0); // Reset slider
-  };
-
-  const nextSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (selectedEvent?.slides) {
-      setCurrentSlideIndex((prev) => (prev + 1) % selectedEvent.slides!.length);
-    }
-  };
-
-  const prevSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (selectedEvent?.slides) {
-      setCurrentSlideIndex((prev) => (prev - 1 + selectedEvent.slides!.length) % selectedEvent.slides!.length);
-    }
   };
 
   return (
@@ -212,7 +199,6 @@ export const SectionTimeline: React.FC = () => {
       >
         <div className="bg-white p-8 md:p-12 shadow-md border border-stone-100 rounded-xl relative">
           
-          {/* Subtitle / Meta-commentary */}
           <div className="font-serif font-bold text-2xl text-ink mb-6 text-center border-b border-stone-200 pb-4">
              引言
           </div>
@@ -220,7 +206,6 @@ export const SectionTimeline: React.FC = () => {
             “（晕，好长的intro，vibe coding的时候憋了半天只有300字，打开word、回到舒适区后直接覆水难收了）：”
           </p>
           
-          {/* Body Text with BOLD requirements */}
           <div className="font-serif text-lg text-stone-700 leading-loose space-y-6 text-justify">
             <p>
               {parseBold('从2024到2026，用了从word、ppt的媒介到轻松vibe coding出一个网页的方式完成元旦祝福，仿佛也是从工业时代走到了智能时代。8月我还说我只会在写党会感想时使用AI，教师节时，我还在给你兴奋展示我（小小）辛苦搭建出（不甚满意的）个人网站，而几个月后，完成一个让我基本满意的网页已是如此轻松（最终发现要完成这么多内容也不是那么轻松），还体验完成了一篇AI为第一作者的论文。技术的迭代进步无从抵抗。')}
@@ -290,31 +275,33 @@ export const SectionTimeline: React.FC = () => {
                 {event.description}
               </div>
 
-              {/* Interaction Buttons - Conditional per Node Type */}
-              
-              {/* 2024 Button */}
+              {/* 2024 PDF Button */}
               {event.year === '2024' && (
                 <div className="mt-6">
-                  <button 
-                    onClick={() => handleOpenModal(event)}
-                    className="inline-flex items-center gap-2 px-5 py-2 border border-stone-300 text-sm text-stone-600 hover:text-stone-900 hover:border-stone-500 hover:bg-white transition-all rounded-full font-serif bg-transparent"
+                  <a 
+                    href={event.pdfLink || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2 border border-stone-300 text-sm text-stone-600 hover:text-stone-900 hover:border-stone-500 hover:bg-white transition-all rounded-full font-serif bg-transparent no-underline"
                   >
-                    <Eye size={16} />
+                    <FileText size={16} />
                     Review Full PDF
-                  </button>
+                  </a>
                 </div>
               )}
 
-              {/* 2025 Button */}
+              {/* 🔴 修改点：2025 PDF Button (原 PPT) */}
               {event.year === '2025' && (
                 <div className="mt-6">
-                  <button 
-                    onClick={() => handleOpenModal(event)}
-                    className="inline-flex items-center gap-2 px-5 py-2 border border-stone-300 text-sm text-stone-600 hover:text-stone-900 hover:border-stone-500 hover:bg-white transition-all rounded-full font-serif bg-transparent"
+                  <a 
+                    href={event.pdfLink || '#'} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2 border border-stone-300 text-sm text-stone-600 hover:text-stone-900 hover:border-stone-500 hover:bg-white transition-all rounded-full font-serif bg-transparent no-underline"
                   >
-                    <Presentation size={16} />
-                    Review Full PPT
-                  </button>
+                    <FileText size={16} />
+                    Review Full PDF (Slides)
+                  </a>
                 </div>
               )}
 
@@ -335,7 +322,7 @@ export const SectionTimeline: React.FC = () => {
         })}
       </div>
 
-      {/* Unified Modal */}
+      {/* Modal 部分已不再需要，因为都改成了直接跳转 PDF，保留空结构以防报错 */}
       <AnimatePresence>
         {selectedEvent && (
           <motion.div 
@@ -345,126 +332,6 @@ export const SectionTimeline: React.FC = () => {
             className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedEvent(null)}
           >
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0, y: 10 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 10 }}
-              className="bg-paper p-0 max-w-2xl w-full shadow-2xl rounded-lg overflow-hidden flex flex-col max-h-[90vh]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="p-6 border-b border-stone-100 flex justify-between items-start bg-white">
-                <div className="flex-1 pr-8">
-                   <div className="flex items-center gap-2 text-stone-500 mb-1">
-                      {getIcon(selectedEvent.iconType)}
-                      <span className="font-mono text-sm uppercase tracking-wider">{selectedEvent.year}</span>
-                   </div>
-                   <h3 className="text-xl md:text-2xl font-serif font-bold text-ink leading-snug">{selectedEvent.title}</h3>
-                </div>
-                <button 
-                  onClick={() => setSelectedEvent(null)}
-                  className="p-2 bg-stone-50 hover:bg-stone-100 rounded-full text-stone-400 hover:text-ink transition-colors flex-shrink-0"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              
-              {/* Modal Body */}
-              <div className="p-8 overflow-y-auto bg-stone-50/30">
-                
-                {/* 1. Quote (Blockquote Style) */}
-                <div className="relative mb-8 pl-6 border-l-4 border-stone-300">
-                  <Quote className="absolute -top-3 -left-2 text-stone-200 fill-stone-200" size={32} />
-                  <p className="font-serif text-lg md:text-xl text-stone-700 leading-relaxed italic whitespace-pre-line">
-                    {selectedEvent.details}
-                  </p>
-                </div>
-
-                <div className="w-12 h-px bg-stone-200 mx-auto mb-8"></div>
-
-                {/* 2. Content Preview (PDF or Slides) */}
-                
-                {/* 2024: PDF Placeholder */}
-                {selectedEvent.year === '2024' && (
-                  <div className="space-y-6">
-                    <div className="w-full aspect-[3/4] bg-white border border-stone-200 p-8 shadow-inner rounded-sm flex flex-col items-center justify-center text-stone-300">
-                      <FileText size={48} strokeWidth={1} />
-                      <p className="mt-4 font-serif text-stone-400">PDF Preview Placeholder</p>
-                    </div>
-                    {selectedEvent.pdfLink && (
-                      <div className="text-center">
-                        <button 
-                          className="inline-flex items-center gap-2 px-8 py-3 bg-stone-800 text-white rounded-md hover:bg-stone-700 transition-colors font-serif shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                        >
-                          <Download size={18} />
-                          Download PDF
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* 2025: Slides Gallery */}
-                {selectedEvent.year === '2025' && selectedEvent.slides && (
-                  <div className="space-y-6">
-                    <div className="relative group/slider">
-                      <div className="aspect-[16/9] bg-stone-900 rounded-md overflow-hidden relative shadow-lg ring-1 ring-stone-900/5">
-                        <AnimatePresence mode="wait">
-                          <motion.img 
-                            key={currentSlideIndex}
-                            src={selectedEvent.slides[currentSlideIndex]} 
-                            alt={`Slide ${currentSlideIndex + 1}`} 
-                            className="w-full h-full object-contain bg-black"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                          />
-                        </AnimatePresence>
-                        
-                        {/* Navigation Overlays */}
-                        <div className="absolute inset-0 flex items-center justify-between p-2 opacity-0 group-hover/slider:opacity-100 transition-opacity">
-                          <button 
-                            onClick={prevSlide}
-                            className="p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-colors"
-                          >
-                            <ChevronLeft size={20} />
-                          </button>
-                          <button 
-                            onClick={nextSlide}
-                            className="p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-colors"
-                          >
-                            <ChevronRight size={20} />
-                          </button>
-                        </div>
-
-                        {/* Dots */}
-                        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                          {selectedEvent.slides.map((_, idx) => (
-                            <div 
-                              key={idx}
-                              className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === currentSlideIndex ? 'bg-white' : 'bg-white/40'}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-center text-xs text-stone-400 mt-3 font-mono">
-                        第 {currentSlideIndex + 1} 页 / 共 {selectedEvent.slides.length} 页
-                      </p>
-                    </div>
-                    
-                    {/* Action */}
-                    <div className="text-center">
-                       <button className="inline-flex items-center gap-2 px-8 py-3 bg-stone-800 text-white rounded-md hover:bg-stone-700 transition-colors font-serif shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                          <Download size={18} />
-                          Download PPT
-                       </button>
-                    </div>
-                  </div>
-                )}
-                
-              </div>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
