@@ -9,6 +9,11 @@ const imgLandscape = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-co
 const imgBanner = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6"; 
 const imgSmallIcon = "w-full max-w-[300px] h-auto rounded-lg shadow-md border border-stone-200 block mx-auto my-4";
 
+// 🔴 修改：大图样式
+// w-full: 手机上占满
+// md:w-1/2: 电脑上只占一半 (50%)
+const imgLarge = "w-full md:w-1/2 h-auto rounded-lg shadow-md border border-stone-200 block mx-auto my-8";
+
 // Helper to parse markdown-style bolding
 const parseBold = (text: string) => {
   if (!text) return null;
@@ -44,7 +49,6 @@ const timelineData: TimelineEvent[] = [
         />
       </div>
     ),
-    // 这段话会显示在引用块里
     details: "最后的最后，再次感谢您过去一年里有意无意之间对我的启发、给我的力量，衷心地祝福您福暖四季、顺遂安康，继续做更多批判又真实、浪漫又需要、中国又世界、满怀真诚和力量的理论与实证研究！—— 淏璇 二〇二四·元旦",
     pdfLink: '/2024blessing.pdf' 
   },
@@ -70,10 +74,11 @@ const timelineData: TimelineEvent[] = [
           {parseBold('回看去年的小作文，才发现原来大多数事、思考都是过去的延续、仍未完成，事情在时间/时间在事情中持存、绵延着。2025年，我仍在您的包容、放养中继续着wandering/messing about，继续努力思考宏大，在思考中炼就些“变熟悉为陌生”的理论直觉与勇气。')}
         </p>
 
+        {/* 使用了新的 imgLarge 样式 (50% 宽度) */}
         <img 
           src="/20250106change.png" 
           alt="20250106change.png" 
-          className={imgLandscape}
+          className={imgLarge}
         />
 
         <p>
@@ -83,14 +88,14 @@ const timelineData: TimelineEvent[] = [
           {parseBold('尤其是和过去的那个我自己之间的矛盾、困扰，突然发觉自己好像把握不了、不确定到底什么才是重要的、有价值的问题了，感到过往习惯的只是去呈现、揭示、暴露出问题不足够了，感受到只去做规范性、价值性思考的无力，但到底如何真的带来改变，找到一套切实可行、能说服人、推动改变的替代方案是如此难以做到，在无意义和做不到之间，**我似乎有些陷入了不知道到底什么值得做、到底选择做什么的想法上的不断跳跃与行动上的停滞。当下，或也只得希望、将这些犯错、自我怀疑、止步不前视作宝贵、值得的必经。**')}
         </p>
 
+        {/* 使用了新的 imgLarge 样式 (50% 宽度) */}
         <img 
           src="/20240926.png" 
           alt="20240926.png" 
-          className={imgLandscape}
+          className={imgLarge}
         />
       </div>
     ),
-    // 这段话会显示在引用块里
     details: "THANKS FOR THE MULTI-LIGHTEN-ING 要缓慢而坚定地更新，要在范式、知识技术的增长中保有澄明与自由，要成其所是——淏璇 二〇二五·元旦",
     pdfLink: '/2025blessing.pdf',
   },
@@ -249,7 +254,7 @@ export const SectionTimeline: React.FC = () => {
                 {event.description}
               </div>
 
-              {/* 🔴 修复：在这里添加了 Quote 引用块，把 details 的内容展示出来 */}
+              {/* Quote Block */}
               {event.details && (
                 <div className="max-w-3xl mt-6 mb-6 p-6 bg-stone-50 rounded-lg border-l-4 border-stone-300 relative">
                   <Quote className="absolute top-4 left-2 text-stone-200 w-8 h-8 -z-1" />
