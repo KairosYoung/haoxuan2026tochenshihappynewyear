@@ -230,4 +230,16 @@ export const SectionQuotes: React.FC = () => {
                  <div className="md:col-span-2 flex justify-center">
                     <div className="w-full md:w-1/2">
                         <Sticker 
-                          src="/weishi
+                          src="/weishihenxinwei.png" 
+                          alt="Relieved" 
+                          rotate={0}
+                        />
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+      </div>
+    </section>
+  );
+};
