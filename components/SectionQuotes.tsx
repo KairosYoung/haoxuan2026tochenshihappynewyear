@@ -58,24 +58,24 @@ const FlipCard: React.FC<FlipCardProps> = ({ frontContent, backContent, classNam
   );
 };
 
-// --- Sticker Component (Modified for Grid Layout) ---
+// --- Sticker Component ---
 const Sticker = ({ src, alt, rotate = 0 }: { src: string, alt: string, rotate?: number }) => (
   <motion.div 
-    className="relative cursor-pointer flex items-center justify-center p-4"
+    className="relative cursor-pointer flex items-center justify-center p-2"
     initial={{ rotate: rotate }}
     whileHover={{ 
-      scale: 1.15, // 稍微放大一点
-      rotate: 0,   // 悬停时摆正
+      scale: 1.1, 
+      rotate: 0,   
       zIndex: 10 
     }}
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
   >
-    <div className="bg-white p-3 shadow-lg border border-stone-100 rounded-xl transform transition-transform hover:shadow-2xl">
-      {/* 🔴 关键修改：图片尺寸不再写死，而是自适应容器，最大高度限制一下防止太长 */}
+    <div className="bg-white p-2 md:p-3 shadow-lg border border-stone-100 rounded-xl transform transition-transform hover:shadow-2xl w-full">
+      {/* 🔴 修改：放开了最大高度限制，让图片尽可能撑满容器 */}
       <img 
         src={src} 
         alt={alt} 
-        className="w-full h-auto max-h-[300px] object-contain rounded-md" 
+        className="w-full h-auto object-contain rounded-md" 
       />
     </div>
   </motion.div>
@@ -99,12 +99,12 @@ export const SectionQuotes: React.FC = () => {
          </p>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 space-y-16">
+      <div className="max-w-6xl mx-auto px-6 space-y-20">
         
         {/* 2. Top Row: Flip Cards (Grid of 3) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          {/* Card 1: The AI Philosophy */}
+          {/* Card 1 */}
           <FlipCard 
             frontColorClass="bg-stone-50"
             frontContent={
@@ -122,7 +122,7 @@ export const SectionQuotes: React.FC = () => {
             }
           />
 
-          {/* Card 2: Freedom */}
+          {/* Card 2 */}
           <FlipCard 
             frontColorClass="bg-[#FFFBEB]"
             frontContent={
@@ -148,7 +148,7 @@ export const SectionQuotes: React.FC = () => {
             }
           />
 
-          {/* Card 3: Health & Hair */}
+          {/* Card 3 */}
           <FlipCard 
             frontColorClass="bg-[#FEF2F2]"
             frontContent={
@@ -172,68 +172,62 @@ export const SectionQuotes: React.FC = () => {
           />
         </div>
 
-        {/* 3. Bottom Area: Sticker Wall (Redesigned for Larger Images) */}
-        <div className="relative w-full bg-stone-100/50 rounded-3xl border border-stone-200 overflow-hidden shadow-inner p-8 md:p-12">
+        {/* 3. Bottom Area: Sticker Wall (Redesigned) */}
+        {/* 🔴 修改：去掉了 overflow-hidden，这样顶部的标签就不会被切掉了 */}
+        <div className="relative w-full bg-stone-100/50 rounded-3xl border border-stone-200 shadow-inner p-6 md:p-12">
             
             {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#78716c 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+            <div className="absolute inset-0 opacity-10 rounded-3xl overflow-hidden" style={{ backgroundImage: 'radial-gradient(#78716c 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
             
             {/* Label */}
-            <div className="absolute top-0 left-0 right-0 flex justify-center -mt-4 z-20">
-               <div className="bg-white px-6 py-2 rounded-full shadow-sm border border-stone-200 flex items-center gap-2 text-stone-500">
+            <div className="absolute top-0 left-0 right-0 flex justify-center -mt-5 z-20">
+               <div className="bg-white px-6 py-2.5 rounded-full shadow-md border border-stone-200 flex items-center gap-2 text-stone-600">
                   <StickerIcon size={18} />
                   <span className="text-sm font-bold uppercase tracking-widest">Meme Collection / 表情包大赏</span>
                </div>
             </div>
 
-            {/* 🔴 Grid Layout: 2 columns on mobile, 3 columns on desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mt-6">
+            {/* 🔴 关键修改：改为 2 列布局 (grid-cols-2)，图片会变得非常大！ */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mt-8">
                 
                 <Sticker 
                   src="/jingdianbaoqingbao.png" 
                   alt="Classic Meme" 
-                  rotate={-3}
+                  rotate={-2}
                 />
                 
                 <Sticker 
                   src="/jiaolv.png" 
                   alt="Anxiety" 
-                  rotate={2}
+                  rotate={1}
                 />
 
                 <Sticker 
                   src="/biefangguowo.png" 
                   alt="Don't let me go" 
-                  rotate={-2}
+                  rotate={-1}
                 />
 
                 <Sticker 
                   src="/cuiming.png" 
                   alt="Urging" 
-                  rotate={1}
+                  rotate={2}
                 />
 
                 <Sticker 
                   src="/zijigongjiziji.png" 
                   alt="Self Attack" 
-                  rotate={-4}
+                  rotate={-3}
                 />
 
                 <Sticker 
                   src="/zaofengzhiren.png" 
                   alt="Wind Creator" 
-                  rotate={3}
+                  rotate={1}
                 />
 
-                <Sticker 
-                  src="/weishihenxinwei.png" 
-                  alt="Relieved" 
-                  rotate={2}
-                />
-            </div>
-        </div>
-
-      </div>
-    </section>
-  );
-};
+                 {/* 如果最后一张是单数，让它在中间显示 (col-span-full) */}
+                 <div className="md:col-span-2 flex justify-center">
+                    <div className="w-full md:w-1/2">
+                        <Sticker 
+                          src="/weishi
