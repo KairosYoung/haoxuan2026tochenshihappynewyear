@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TimelineEvent } from '../types';
-import { FileText, Presentation, Code, X, ChevronLeft, ChevronRight, Download, Eye, Quote, Terminal } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { FileText, Presentation, Code, Terminal, Eye, Quote } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 // Specific Image Style Classes
 const imgPortrait = "w-full max-w-[240px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6";
 const imgLandscape = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6";
 const imgBanner = "w-full max-w-[280px] h-auto rounded-lg shadow-md object-cover border border-stone-200 block mx-auto my-6"; 
-
-// 修复点 1：让小图标完整显示，不裁剪
 const imgSmallIcon = "w-full max-w-[300px] h-auto rounded-lg shadow-md border border-stone-200 block mx-auto my-4";
 
 // Helper to parse markdown-style bolding
@@ -46,8 +44,8 @@ const timelineData: TimelineEvent[] = [
         />
       </div>
     ),
+    // 这段话会显示在引用块里
     details: "最后的最后，再次感谢您过去一年里有意无意之间对我的启发、给我的力量，衷心地祝福您福暖四季、顺遂安康，继续做更多批判又真实、浪漫又需要、中国又世界、满怀真诚和力量的理论与实证研究！—— 淏璇 二〇二四·元旦",
-    // 2024 PDF 链接
     pdfLink: '/2024blessing.pdf' 
   },
   {
@@ -92,14 +90,9 @@ const timelineData: TimelineEvent[] = [
         />
       </div>
     ),
+    // 这段话会显示在引用块里
     details: "THANKS FOR THE MULTI-LIGHTEN-ING 要缓慢而坚定地更新，要在范式、知识技术的增长中保有澄明与自由，要成其所是——淏璇 二〇二五·元旦",
-    // 🔴 修改点：2025 也改为 PDF 链接
     pdfLink: '/2025blessing.pdf',
-    slides: [
-      '/slide1.png',
-      '/slide2.png',
-      '/slide3.png',
-    ]
   },
   {
     id: '2026',
@@ -164,8 +157,6 @@ const timelineData: TimelineEvent[] = [
 ];
 
 export const SectionTimeline: React.FC = () => {
-  const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
-
   const getIcon = (type: string) => {
     switch (type) {
       case 'text': return <FileText size={18} className="text-stone-400" />;
@@ -175,14 +166,10 @@ export const SectionTimeline: React.FC = () => {
     }
   };
 
-  const handleOpenModal = (event: TimelineEvent) => {
-    setSelectedEvent(event);
-  };
-
   return (
     <section className="relative scroll-mt-20" id="timeline">
       
-      {/* 1. Structural Heading (Outside Card) */}
+      {/* 1. Structural Heading */}
       <div className="max-w-4xl mx-auto mb-10 pl-2">
          <h2 className="text-3xl md:text-4xl font-serif text-ink mb-2">
             The Evolution of Blessings: <span className="italic text-stone-500">medium & identity</span>
@@ -190,7 +177,7 @@ export const SectionTimeline: React.FC = () => {
          <div className="h-1 w-24 bg-stone-300 mt-4"></div>
       </div>
 
-      {/* 2. Intro Card: Letter Look */}
+      {/* 2. Intro Card */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -198,33 +185,20 @@ export const SectionTimeline: React.FC = () => {
         className="max-w-4xl mx-auto mb-24"
       >
         <div className="bg-white p-8 md:p-12 shadow-md border border-stone-100 rounded-xl relative">
-          
           <div className="font-serif font-bold text-2xl text-ink mb-6 text-center border-b border-stone-200 pb-4">
              引言
           </div>
           <p className="text-stone-400 italic text-sm font-sans tracking-wide mb-8 text-center">
             “（晕，好长的intro，vibe coding的时候憋了半天只有300字，打开word、回到舒适区后直接覆水难收了）：”
           </p>
-          
           <div className="font-serif text-lg text-stone-700 leading-loose space-y-6 text-justify">
-            <p>
-              {parseBold('从2024到2026，用了从word、ppt的媒介到轻松vibe coding出一个网页的方式完成元旦祝福，仿佛也是从工业时代走到了智能时代。8月我还说我只会在写党会感想时使用AI，教师节时，我还在给你兴奋展示我（小小）辛苦搭建出（不甚满意的）个人网站，而几个月后，完成一个让我基本满意的网页已是如此轻松（最终发现要完成这么多内容也不是那么轻松），还体验完成了一篇AI为第一作者的论文。技术的迭代进步无从抵抗。')}
-            </p>
-            <p>
-              {parseBold('想来，2022年11月20日，我刚研究生入学两个月，ChatGPT发布；2023春，我印象中《课程政治社会学》的课上还很少直接讨论AI，总之，AI还没有在我对这门课、对您的记忆中留下太深刻的“印记”。2023年冬，教材论坛的主旨报告里，您在问**数智时代（The Digital-AI Eta）什么知识最有价值，“知其然不知其所以然造其然”的AI如何挑战传统的知识秩序，如何理解已知、未知、无知，我们对教材的“象”限制在了哪里**。或许这也是在问“记忆”（图像）如何限制了我们的“想象”，但“想象”又如何不彻底“遗忘”过去，我们如何在记忆与遗忘中发明历史、制造希望。而到如今，我们在过去一年的一切讨论，我对您本人的“记忆”与“图像”几乎再也离不开AI。**这的确不仅是关于AI的技术，而就是作为AI的 “时代” **。')}
-            </p>
-            <p>
-              {parseBold('那么，有什么变了，什么不变。不变的是，如今的我好像是莫名又回到了两年前您提出的这几个“有价值”的问题的思考中。变的是，现在的我比当时我似乎更“听得见”“听得懂”这些问题了，这些过去重新在场了。或许我也多了一点点本事去能思考这些了，但更重要的也许还是，对想要回应这些问题的“意向性”更清晰地在浮现和被外在化了。也发现，2025年底的最后两天我才在读哈耶克，才读到了两年前听您说到的“ignorance”，过程中脑中开始不断浮现、回想这学期您跟我说，您始终在想的还是“一个社会是如何组织的、可能的、得以维持的”。是啊，个人如何在“无知”的情形下进行其行动并应对这种“无知”， **社会秩序是如何诞生与维持于“知”“未知”“无知”的知识秩序中的呢？**')}
-            </p>
-            <p>
-              {parseBold('技术、媒介之外，这个开启于偶然但难以克制的长篇大论的元旦小作文活动，也见证、促成了身份、关系的变迁：我从2024元旦的忐忑、不熟，到2025元旦的决定就要跟陈老师读博，到2026元旦的“先放我一马”。而你也从“谢谢你的长篇大论！”到“终于等到你的了”到** “你今年不给我写新年小作文了” **。')}
-            </p>
-            <p>
-              {parseBold('事实上，正如我们之前聊到的那样，AI或已经不仅是媒介，TA也在搅乱我小作文生产的秩序：**首先**，我几乎是想着要来借机测试体验一下vibe coding才一下子在1.1日早晨从床上弹射了起来，急切来办公室打开电脑，而如果我想着我是要打开word，写上几千字，我估计我就又先睡过去了（发自内心想给你写小作文，但as we all know，开始写作总是困难的）。**其次**，从vibe coding出一个互动网页的想法，直接影响了我写什么、如何写，比如vibe coding让我觉得做一个年度回顾、做一个照片墙、排序一下我一堆光挖不填的坑、设定一个可实时更新、随时check的2026DDL是完全可行的；而这段引言的长篇大论和最终得以完成真正的实质内容文本，完全是因为我选择在1.4重新回到了word中流畅的写作，前面始终在vibe coding的对话框里实在是让我无法“长篇大论”。当然，这可能完全只是因为我被word装配的久了。**最后**，我想如果不是vibe coding的技术可及性，这篇小作文会让你等的更久，因为word、pdf的静态属性会让我对后面的“idea notebook-index”和“西西弗斯的西西弗柿/事”部分更加审慎，我1.1号无法完成，**实则也是因为idea notebook-index部分太多东西我还没整理好、想好，担心遗忘漏掉了什么而一经发送就无可改变，但如果是网页的形式，我就可以在后台修改了，智能时代教材的风险或许也就是这样的“印记”不再如化石、档案那样静态稳固而是实时、动态、可修改的了**，虽然也是可以设置data history的。在面对“你今年不给我写新年小作文了”的愧疚下，在这样的技术加持下，我想先抛出来这个未完成、但可以在接下来一年里再不断更新、调整的作品，也不失为一个好主意、好尝试。**从word到vibe coding一个网页的技术媒介变化下，我给你写作文这件小事的知识生产秩序也已经在悄然改变，我似乎可以不再为发给你就不可更改的电子文档所限了。**')}
-            </p>
-            <p>
-              {parseBold('AI真的来了，我也“终于”正式跟陈老师读博了，但小作文仍会到，小作文也仍然只能因为我书写出的内容而真正存在。返回的形式、媒介也许会变，**但我一如既往的长篇大论、时不时轰炸着您，我们仍会在、仍是在新年之际回到过去，在遗忘中努力记忆，让过去重新在场，在过去、现在的在场中想象未来。**')}
-            </p>
+             {/* ... Intro text content ... */}
+             <p>{parseBold('从2024到2026，用了从word、ppt的媒介到轻松vibe coding出一个网页的方式完成元旦祝福，仿佛也是从工业时代走到了智能时代。8月我还说我只会在写党会感想时使用AI，教师节时，我还在给你兴奋展示我（小小）辛苦搭建出（不甚满意的）个人网站，而几个月后，完成一个让我基本满意的网页已是如此轻松（最终发现要完成这么多内容也不是那么轻松），还体验完成了一篇AI为第一作者的论文。技术的迭代进步无从抵抗。')}</p>
+             <p>{parseBold('想来，2022年11月20日，我刚研究生入学两个月，ChatGPT发布；2023春，我印象中《课程政治社会学》的课上还很少直接讨论AI，总之，AI还没有在我对这门课、对您的记忆中留下太深刻的“印记”。2023年冬，教材论坛的主旨报告里，您在问**数智时代（The Digital-AI Eta）什么知识最有价值，“知其然不知其所以然造其然”的AI如何挑战传统的知识秩序，如何理解已知、未知、无知，我们对教材的“象”限制在了哪里**。或许这也是在问“记忆”（图像）如何限制了我们的“想象”，但“想象”又如何不彻底“遗忘”过去，我们如何在记忆与遗忘中发明历史、制造希望。而到如今，我们在过去一年的一切讨论，我对您本人的“记忆”与“图像”几乎再也离不开AI。**这的确不仅是关于AI的技术，而就是作为AI的 “时代” **。')}</p>
+             <p>{parseBold('那么，有什么变了，什么不变。不变的是，如今的我好像是莫名又回到了两年前您提出的这几个“有价值”的问题的思考中。变的是，现在的我比当时我似乎更“听得见”“听得懂”这些问题了，这些过去重新在场了。或许我也多了一点点本事去能思考这些了，但更重要的也许还是，对想要回应这些问题的“意向性”更清晰地在浮现和被外在化了。也发现，2025年底的最后两天我才在读哈耶克，才读到了两年前听您说到的“ignorance”，过程中脑中开始不断浮现、回想这学期您跟我说，您始终在想的还是“一个社会是如何组织的、可能的、得以维持的”。是啊，个人如何在“无知”的情形下进行其行动并应对这种“无知”， **社会秩序是如何诞生与维持于“知”“未知”“无知”的知识秩序中的呢？**')}</p>
+             <p>{parseBold('技术、媒介之外，这个开启于偶然但难以克制的长篇大论的元旦小作文活动，也见证、促成了身份、关系的变迁：我从2024元旦的忐忑、不熟，到2025元旦的决定就要跟陈老师读博，到2026元旦的“先放我一马”。而你也从“谢谢你的长篇大论！”到“终于等到你的了”到** “你今年不给我写新年小作文了” **。')}</p>
+             <p>{parseBold('事实上，正如我们之前聊到的那样，AI或已经不仅是媒介，TA也在搅乱我小作文生产的秩序：**首先**，我几乎是想着要来借机测试体验一下vibe coding才一下子在1.1日早晨从床上弹射了起来，急切来办公室打开电脑，而如果我想着我是要打开word，写上几千字，我估计我就又先睡过去了（发自内心想给你写小作文，但as we all know，开始写作总是困难的）。**其次**，从vibe coding出一个互动网页的想法，直接影响了我写什么、如何写，比如vibe coding让我觉得做一个年度回顾、做一个照片墙、排序一下我一堆光挖不填的坑、设定一个可实时更新、随时check的2026DDL是完全可行的；而这段引言的长篇大论和最终得以完成真正的实质内容文本，完全是因为我选择在1.4重新回到了word中流畅的写作，前面始终在vibe coding的对话框里实在是让我无法“长篇大论”。当然，这可能完全只是因为我被word装配的久了。**最后**，我想如果不是vibe coding的技术可及性，这篇小作文会让你等的更久，因为word、pdf的静态属性会让我对后面的“idea notebook-index”和“西西弗斯的西西弗柿/事”部分更加审慎，我1.1号无法完成，**实则也是因为idea notebook-index部分太多东西我还没整理好、想好，担心遗忘漏掉了什么而一经发送就无可改变，但如果是网页的形式，我就可以在后台修改了，智能时代教材的风险或许也就是这样的“印记”不再如化石、档案那样静态稳固而是实时、动态、可修改的了**，虽然也是可以设置data history的。在面对“你今年不给我写新年小作文了”的愧疚下，在这样的技术加持下，我想先抛出来这个未完成、但可以在接下来一年里再不断更新、调整的作品，也不失为一个好主意、好尝试。**从word到vibe coding一个网页的技术媒介变化下，我给你写作文这件小事的知识生产秩序也已经在悄然改变，我似乎可以不再为发给你就不可更改的电子文档所限了。**')}</p>
+             <p>{parseBold('AI真的来了，我也“终于”正式跟陈老师读博了，但小作文仍会到，小作文也仍然只能因为我书写出的内容而真正存在。返回的形式、媒介也许会变，**但我一如既往的长篇大论、时不时轰炸着您，我们仍会在、仍是在新年之际回到过去，在遗忘中努力记忆，让过去重新在场，在过去、现在的在场中想象未来。**')}</p>
           </div>
         </div>
       </motion.div>
@@ -257,7 +231,7 @@ export const SectionTimeline: React.FC = () => {
                 `}></div>
               </div>
 
-              {/* Header: Date - Icon - Title (Single Line) */}
+              {/* Header */}
               <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 mb-6">
                  <div className="flex items-center gap-3">
                     <span className="font-mono text-sm text-stone-500 font-medium whitespace-nowrap">{event.date}</span>
@@ -270,14 +244,24 @@ export const SectionTimeline: React.FC = () => {
                  </h3>
               </div>
 
-              {/* Description & Interleaved Content */}
+              {/* Description */}
               <div className="text-pencil font-sans text-base md:text-lg leading-loose text-justify max-w-3xl mb-4">
                 {event.description}
               </div>
 
-              {/* 2024 PDF Button */}
+              {/* 🔴 修复：在这里添加了 Quote 引用块，把 details 的内容展示出来 */}
+              {event.details && (
+                <div className="max-w-3xl mt-6 mb-6 p-6 bg-stone-50 rounded-lg border-l-4 border-stone-300 relative">
+                  <Quote className="absolute top-4 left-2 text-stone-200 w-8 h-8 -z-1" />
+                  <p className="font-serif text-stone-700 italic text-lg leading-relaxed relative z-10">
+                    {event.details}
+                  </p>
+                </div>
+              )}
+
+              {/* 2024 PDF Link */}
               {event.year === '2024' && (
-                <div className="mt-6">
+                <div className="mt-2">
                   <a 
                     href={event.pdfLink || '#'}
                     target="_blank"
@@ -290,9 +274,9 @@ export const SectionTimeline: React.FC = () => {
                 </div>
               )}
 
-              {/* 🔴 修改点：2025 PDF Button (原 PPT) */}
+              {/* 2025 PDF Link */}
               {event.year === '2025' && (
-                <div className="mt-6">
+                <div className="mt-2">
                   <a 
                     href={event.pdfLink || '#'} 
                     target="_blank"
@@ -321,20 +305,6 @@ export const SectionTimeline: React.FC = () => {
           );
         })}
       </div>
-
-      {/* Modal 部分已不再需要，因为都改成了直接跳转 PDF，保留空结构以防报错 */}
-      <AnimatePresence>
-        {selectedEvent && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedEvent(null)}
-          >
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };
