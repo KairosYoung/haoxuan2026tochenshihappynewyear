@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Loader2, MousePointer2, Sparkles, 
-  CircleDashed, X, Eye, Brain, Sun
+  CircleDashed, X, Eye, Brain, Sun, Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -33,7 +33,9 @@ const PipelineItem = ({
   children,
   onAction,
   actionLabel = "VIEW DRAFT",
-  colorClass = "border-stone-200"
+  colorClass = "border-stone-200",
+  isDownload = false,
+  downloadLink = ""
 }: { 
   title: string; 
   badge?: string; 
@@ -43,6 +45,8 @@ const PipelineItem = ({
   onAction?: () => void;
   actionLabel?: string;
   colorClass?: string;
+  isDownload?: boolean;
+  downloadLink?: string;
 }) => (
   <div className="relative pl-8 pb-10 last:pb-0 group">
      {/* Timeline Line */}
@@ -71,11 +75,22 @@ const PipelineItem = ({
 
          {children}
 
-         {onAction && (
-             <button onClick={onAction} className={BUTTON_STYLE}>
-                 <Eye size={14} />
+         {isDownload ? (
+             <a 
+               href={downloadLink} 
+               download 
+               className={BUTTON_STYLE}
+             >
+                 <Download size={14} />
                  <span>{actionLabel}</span>
-             </button>
+             </a>
+         ) : (
+             onAction && (
+                 <button onClick={onAction} className={BUTTON_STYLE}>
+                     <Eye size={14} />
+                     <span>{actionLabel}</span>
+                 </button>
+             )
          )}
      </div>
   </div>
@@ -183,35 +198,32 @@ export const SectionSisyphus: React.FC = () => {
     }, 2000);
   };
 
-  // Trigger Grand Fireworks - Updated with Z-Index fix and continuous barrage
+  // Trigger Grand Fireworks
   const triggerFireworks = () => {
       const duration = 3000;
       const end = Date.now() + duration;
       const colors = ['#ef4444', '#eab308', '#3b82f6', '#10b981', '#8b5cf6', '#D4AF37', '#ffffff'];
 
       (function frame() {
-        // Left Cannon
         confetti({
           particleCount: 5,
           angle: 60,
           spread: 55,
           origin: { x: 0 },
           colors: colors,
-          zIndex: 9999 // CRITICAL FIX: Ensure visibility over modals
+          zIndex: 9999
         });
         
-        // Right Cannon
         confetti({
           particleCount: 5,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
           colors: colors,
-          zIndex: 9999 // CRITICAL FIX
+          zIndex: 9999
         });
         
-        // Random massive bursts occasionally
-        if (Math.random() < 0.1) { // 10% chance per frame for a burst
+        if (Math.random() < 0.1) {
              confetti({
                  particleCount: 80,
                  spread: 120,
@@ -229,7 +241,6 @@ export const SectionSisyphus: React.FC = () => {
 
   const handleGrandFinale = () => {
       triggerFireworks();
-      // Delay showing the modal slightly to let the fireworks start
       setTimeout(() => setShowBlessingModal(true), 1500);
   };
 
@@ -254,10 +265,10 @@ export const SectionSisyphus: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-serif text-ink mb-8">西西弗斯的西西弗柿/事</h2>
           
           {/* Easter Egg 1: Sisyphus Transformation */}
-          <div className="flex flex-col items-center mb-10">
+          <div className="flex flex-col items-center mb-10 h-40 justify-center">
               <motion.div 
                 onClick={() => setIsSisyphusTransformed(!isSisyphusTransformed)}
-                className="w-24 h-24 md:w-32 md:h-32 cursor-pointer relative group z-10"
+                className="cursor-pointer relative z-10"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -265,24 +276,24 @@ export const SectionSisyphus: React.FC = () => {
                      {!isSisyphusTransformed ? (
                         <motion.div
                             key="stone-container"
-                            initial={{ y: 0, opacity: 1 }}
-                            exit={{ y: -100, opacity: 0, scale: 0.8 }}
-                            transition={{ duration: 0.6, ease: "easeInOut" }}
-                            className="w-full h-full"
+                            initial={{ y: 0, opacity: 1, rotate: 0 }}
+                            exit={{ y: -150, opacity: 0, rotate: 360, scale: 0.5 }}
+                            transition={{ duration: 0.8, ease: "easeInOut" }}
+                            className="w-24 h-24 md:w-32 md:h-32"
                         >
                             <img 
                                 src="/xixifushi.png" 
                                 alt="Sisyphus" 
-                                className="w-full h-full object-cover rounded-full border-4 border-stone-100 shadow-inner grayscale hover:grayscale-0 transition-all duration-500 animate-pulse"
+                                className="w-full h-full object-cover rounded-full border-4 border-stone-100 shadow-inner grayscale hover:grayscale-0 transition-all duration-500"
                             />
                         </motion.div>
                      ) : (
                         <motion.div 
                             key="sun"
-                            initial={{ opacity: 0, scale: 0.5, y: 50 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            transition={{ type: "spring", bounce: 0.4 }}
-                            className="w-full h-full rounded-full bg-gradient-to-br from-amber-100 to-orange-200 border-4 border-orange-100 shadow-[0_0_40px_rgba(251,191,36,0.6)] flex items-center justify-center relative overflow-hidden"
+                            initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", bounce: 0.5, duration: 1 }}
+                            className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-amber-100 to-orange-200 border-4 border-orange-100 shadow-[0_0_50px_rgba(251,191,36,0.8)] flex items-center justify-center relative overflow-hidden"
                         >
                             <Sun className="text-orange-500 w-12 h-12 md:w-16 md:h-16 animate-[spin_10s_linear_infinite]" />
                         </motion.div>
@@ -293,7 +304,7 @@ export const SectionSisyphus: React.FC = () => {
               {/* Text Hint Below */}
               <button
                   onClick={() => setIsSisyphusTransformed(!isSisyphusTransformed)}
-                  className="mt-3 flex items-center gap-2 text-stone-500 font-serif text-sm hover:text-amber-700 transition-colors animate-bounce"
+                  className="mt-4 flex items-center gap-2 text-stone-500 font-serif text-sm hover:text-amber-700 transition-colors animate-bounce"
               >
                   <span className="text-lg">👆</span>
                   <span className="border-b border-transparent hover:border-amber-700">点击帮他一把 / Click to help push</span>
@@ -307,9 +318,12 @@ export const SectionSisyphus: React.FC = () => {
                   引言：<br/>
                   老师，这可是您说的“列出来催你，别放过我”。是否想到，我真的给你做一个可视化放这儿[狗头]，以免你每次都（无辜地）说“你催我啊”（确实你也太忙太辛苦，我也不敢催），所以我这里也不是催你，我只是“列出来”放这儿，提醒我自己，嗯。
                 </p>
-                {/* Embedded Meme */}
-                <div className="flex justify-center my-4">
-                   <img src="/biefangguowo.png" alt="Don't let me go" className="w-24 h-auto rounded-md shadow-md border border-stone-200 transform -rotate-2 hover:rotate-0 transition-transform" />
+                <div className="flex justify-center my-6">
+                   <img 
+                      src="/biefangguowo.png" 
+                      alt="Don't let me go" 
+                      className="w-full max-w-[280px] h-auto rounded-md shadow-md border border-stone-200 transform -rotate-1 hover:rotate-0 transition-transform" 
+                   />
                 </div>
               </div>
           </div>
@@ -332,23 +346,25 @@ export const SectionSisyphus: React.FC = () => {
                badge="DDL: 20250530"
                note="（参考您之前发我的华师大学报“中国科学教育政策、研究与实践创新发展”，但感觉也不一定合适、可能不足够科学教育hhhh）"
                colorClass="border-orange-400"
-               onAction={() => {}} 
-               actionLabel="VIEW DRAFT"
+               isDownload={true}
+               downloadLink="/20241111sputnik.docx"
+               actionLabel="DOWNLOAD DRAFT"
              />
 
              <PipelineItem 
                title="2. 基于农耕文化的STEM（2025.09）"
                colorClass="border-orange-400"
-               onAction={() => {}} 
-               actionLabel="VIEW DRAFT"
+               isDownload={true}
+               downloadLink="/20250928RSTEM.docx"
+               actionLabel="DOWNLOAD DRAFT"
              />
 
              <PipelineItem 
                title="3. 帮你记得的你的一句话哈哈哈“今天早上我还在想怎么可以做一个全国老师围绕教材的小红书”"
                colorClass="border-orange-400"
                children={
-                 <div className="mt-4 relative cursor-pointer select-none group w-full max-w-[200px] mx-auto" onClick={handleImageClick}>
-                     {/* UX Hint: Added Badge */}
+                 // 🔴 修改：放大了这张图片 (max-w-[350px])
+                 <div className="mt-4 relative cursor-pointer select-none group w-full max-w-[350px] mx-auto" onClick={handleImageClick}>
                      <div className="absolute -top-3 -right-8 z-20 animate-bounce">
                         <span className="bg-amber-100 text-stone-800 border border-stone-200 text-[10px] font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-1 whitespace-nowrap">
                            <MousePointer2 size={12} /> 点我有惊喜 / Click for Merit
@@ -494,13 +510,11 @@ export const SectionSisyphus: React.FC = () => {
              <PipelineItem 
                 title="4. Learn to Quit：重新理解教育中的“有效失败”"
                 colorClass="border-purple-400"
-                // No modal requested for this one in prompt details
              />
 
              <PipelineItem 
                 title="5. 体育"
                 colorClass="border-purple-400"
-                // No modal requested for this one in prompt details
              />
           </div>
        </div>
@@ -510,7 +524,12 @@ export const SectionSisyphus: React.FC = () => {
            <div className="p-8 bg-stone-800 rounded-2xl shadow-xl text-stone-200 overflow-hidden relative">
                
                {/* 1. Image */}
-               <img src="/linghunshitu.png" alt="Goal" className="w-full max-w-[150px] mx-auto rounded-lg mb-6 border border-stone-600 opacity-90 shadow-md" />
+               {/* 🔴 修改：放大了这张图片 (max-w-[280px]) */}
+               <img 
+                  src="/linghunshitu.png" 
+                  alt="Goal" 
+                  className="w-full max-w-[280px] mx-auto rounded-lg mb-6 border border-stone-600 opacity-90 shadow-md" 
+               />
 
                {/* 2. Text */}
                <h3 className="font-serif text-lg md:text-xl mb-8 leading-relaxed px-4">
