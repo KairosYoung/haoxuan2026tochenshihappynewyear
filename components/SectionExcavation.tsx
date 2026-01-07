@@ -185,7 +185,7 @@ const IDEA_ITEMS: IdeaItem[] = [
         <div className="flex items-start gap-2 mt-2">
             <Heart size={18} className="text-stone-300 mt-1 shrink-0" />
             <p className="text-stone-600 font-serif text-base leading-relaxed">
-            直言、真诚、责任、关怀、脆弱、共情、世界
+            直言、真诚、责任、关怀、脆弱、共情、世界；惊奇、好奇、关怀wonder curiosity care
             </p>
         </div>
     )
@@ -284,7 +284,7 @@ const WipModal: React.FC<{ onClose: () => void }> = ({ onClose }) => (
                  <Construction size={24} />
              </div>
              <h4 className="font-serif font-bold text-xl text-ink mb-2">Thinking in progress...</h4>
-             <p className="text-stone-500 font-serif">思想挖掘中，洞口凿开了，但还没挖深。<br/><span className="text-xs font-mono uppercase mt-2 block opacity-70">Idea initialized, processing...</span></p>
+             <p className="text-stone-500 font-serif">挖掘、加载中。<br/><span className="text-xs font-mono uppercase mt-2 block opacity-70">Idea initialized, processing...</span></p>
              <button onClick={onClose} className="mt-6 p-2 rounded-full hover:bg-stone-100 transition-colors absolute top-2 right-2">
                  <X size={16} className="text-stone-400" />
              </button>
