@@ -58,21 +58,25 @@ const FlipCard: React.FC<FlipCardProps> = ({ frontContent, backContent, classNam
   );
 };
 
-// --- Sticker Component ---
-const Sticker = ({ src, alt, className = "", style = {}, rotate = 0 }: { src: string, alt: string, className?: string, style?: React.CSSProperties, rotate?: number }) => (
+// --- Sticker Component (Modified for Grid Layout) ---
+const Sticker = ({ src, alt, rotate = 0 }: { src: string, alt: string, rotate?: number }) => (
   <motion.div 
-    className={`absolute cursor-help ${className}`}
-    style={style}
+    className="relative cursor-pointer flex items-center justify-center p-4"
     initial={{ rotate: rotate }}
     whileHover={{ 
-      scale: 1.1, 
-      rotate: rotate + (Math.random() > 0.5 ? 5 : -5),
-      zIndex: 50 
+      scale: 1.15, // 稍微放大一点
+      rotate: 0,   // 悬停时摆正
+      zIndex: 10 
     }}
-    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+    transition={{ type: "spring", stiffness: 300, damping: 20 }}
   >
-    <div className="p-1.5 bg-white shadow-md border border-stone-100 rounded-lg">
-      <img src={src} alt={alt} className="w-full h-auto object-contain rounded-sm" />
+    <div className="bg-white p-3 shadow-lg border border-stone-100 rounded-xl transform transition-transform hover:shadow-2xl">
+      {/* 🔴 关键修改：图片尺寸不再写死，而是自适应容器，最大高度限制一下防止太长 */}
+      <img 
+        src={src} 
+        alt={alt} 
+        className="w-full h-auto max-h-[300px] object-contain rounded-md" 
+      />
     </div>
   </motion.div>
 );
@@ -95,7 +99,7 @@ export const SectionQuotes: React.FC = () => {
          </p>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 space-y-8">
+      <div className="max-w-6xl mx-auto px-6 space-y-16">
         
         {/* 2. Top Row: Flip Cards (Grid of 3) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -168,76 +172,63 @@ export const SectionQuotes: React.FC = () => {
           />
         </div>
 
-        {/* 3. Bottom Area: Sticker Wall */}
-        <div className="relative w-full h-[500px] bg-stone-100 rounded-3xl border border-stone-200 overflow-hidden shadow-inner group">
-            {/* Background Texture */}
-            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#A8A29E 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+        {/* 3. Bottom Area: Sticker Wall (Redesigned for Larger Images) */}
+        <div className="relative w-full bg-stone-100/50 rounded-3xl border border-stone-200 overflow-hidden shadow-inner p-8 md:p-12">
+            
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#78716c 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
             
             {/* Label */}
-            <div className="absolute top-6 left-6 z-30 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-sm border border-stone-200">
-               <div className="flex items-center gap-2 text-stone-500">
-                  <StickerIcon size={16} />
-                  <span className="text-xs font-bold uppercase tracking-widest">Meme Collection / 表情包大赏</span>
+            <div className="absolute top-0 left-0 right-0 flex justify-center -mt-4 z-20">
+               <div className="bg-white px-6 py-2 rounded-full shadow-sm border border-stone-200 flex items-center gap-2 text-stone-500">
+                  <StickerIcon size={18} />
+                  <span className="text-sm font-bold uppercase tracking-widest">Meme Collection / 表情包大赏</span>
                </div>
             </div>
 
-            {/* Stickers - Distributed Randomly */}
-            <div className="relative w-full h-full">
+            {/* 🔴 Grid Layout: 2 columns on mobile, 3 columns on desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mt-6">
                 
-                {/* 1. Jingdian (Centerish) */}
                 <Sticker 
                   src="/jingdianbaoqingbao.png" 
                   alt="Classic Meme" 
-                  className="w-32 md:w-40 top-1/4 left-1/4" 
-                  rotate={-6}
+                  rotate={-3}
                 />
                 
-                {/* 2. Jiaolv (Top Right) */}
                 <Sticker 
                   src="/jiaolv.png" 
                   alt="Anxiety" 
-                  className="w-28 md:w-36 top-8 right-12 md:right-32" 
-                  rotate={12}
+                  rotate={2}
                 />
 
-                {/* 3. Biefangguowo (Bottom Left) */}
                 <Sticker 
                   src="/biefangguowo.png" 
                   alt="Don't let me go" 
-                  className="w-32 md:w-40 bottom-12 left-8 md:left-24" 
-                  rotate={-3}
+                  rotate={-2}
                 />
 
-                {/* 4. Cuiming (Bottom Right) */}
                 <Sticker 
                   src="/cuiming.png" 
                   alt="Urging" 
-                  className="w-28 md:w-36 bottom-16 right-8 md:right-24" 
-                  rotate={6}
+                  rotate={1}
                 />
 
-                {/* 5. Ziji Gongji (Middle Left edge) */}
                 <Sticker 
                   src="/zijigongjiziji.png" 
                   alt="Self Attack" 
-                  className="w-24 md:w-32 top-1/2 left-4 md:left-12 -translate-x-1/2" 
-                  rotate={-12}
+                  rotate={-4}
                 />
 
-                {/* 6. Zaofeng (Top Center-ish) */}
                 <Sticker 
                   src="/zaofengzhiren.png" 
                   alt="Wind Creator" 
-                  className="w-28 md:w-36 top-12 left-1/2 -translate-x-1/2" 
                   rotate={3}
                 />
 
-                {/* 7. Xinwei (Center Bottom) */}
                 <Sticker 
                   src="/weishihenxinwei.png" 
                   alt="Relieved" 
-                  className="w-32 md:w-44 top-1/2 left-2/3 md:left-1/2 md:translate-x-12 translate-y-8" 
-                  rotate={-2}
+                  rotate={2}
                 />
             </div>
         </div>
